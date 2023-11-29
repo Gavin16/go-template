@@ -1,0 +1,21 @@
+info:
+  contact: {}
+  description: Your API description
+  termsOfService: http://localhost:8000/swagger/index.html
+  title: Your Application Name
+  version: "1.0"
+paths:
+  /hello:
+    get:
+      description: say 'hello' to given name
+      parameters:
+      - description: 姓名
+        in: query
+        name: name
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      summary: sayHello
+swagger: "2.0"

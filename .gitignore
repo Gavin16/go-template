@@ -1,0 +1,42 @@
+HELP.md
+
+target
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### logs ###
+/logFile/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+
+### VS Code ###
+.vscode/
+
+# Project exclude paths
+/Boot-Demo-Api/target/
+/Boot-Demo-Common/target/
+/Boot-Demo-Container/target/
+/Boot-Demo-Dao/target/
+/Boot-Demo-Service/target/
+/Boot-Demo-Web/target/

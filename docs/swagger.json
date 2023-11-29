@@ -1,0 +1,32 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Your API description",
+        "title": "Your Application Name",
+        "termsOfService": "http://localhost:8000/swagger/index.html",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/hello": {
+            "get": {
+                "description": "say 'hello' to given name",
+                "summary": "sayHello",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "姓名",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    }
+}
