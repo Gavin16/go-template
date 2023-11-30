@@ -9,24 +9,35 @@ import (
 
 /**
  * 使用 resty 库实现http请求发送
+ * 主要封装 GET,POST,PUT 三种请求方式 application/json, multipart/form-data 两种请求数据类型
  */
 
-func Get(url string, headers map[string]string) (*resty.Response, error) {
-	return DoGet(url, headers, nil)
+type HttpRequest interface {
+	Get(param map[string]string) (*resty.Response, error)
+	Post(param map[string]string) (*resty.Response, error)
+	PostJson(param map[string]interface{}) (*resty.Response, error)
+	PostFile(params map[string]string, file map[string][]byte) (*resty.Response, error)
 }
 
-func GetWithParam(url string, headers map[string]string) (*resty.Response, error) {
-	return DoGet(url, headers, nil)
+// ClientEntity package url+headers in struct
+type ClientEntity struct {
+	url     string
+	headers map[string]string
 }
 
-func DoGet(url string, headers map[string]string, param map[string]interface{}) (*resty.Response, error) {
+// Get with form-data content type
+func (ce ClientEntity) Get(param map[string]string) (*resty.Response, error) {
 	client := resty.New()
 	req := client.R()
-	if len(headers) > 0 {
-		req.SetHeaders(headers)
+	if len(ce.headers) > 0 {
+		req.SetHeaders(ce.headers)
 	}
 
-	result, err := req.Get(url)
+	if len(param) > 0 {
+		req.SetFormData(param)
+	}
+
+	result, err := req.Get(ce.url)
 	if err != nil {
 		fmt.Println("get request error:", err)
 		return nil, err
@@ -34,68 +45,32 @@ func DoGet(url string, headers map[string]string, param map[string]interface{}) 
 	return result, nil
 }
 
-func Post(url string, param map[string]interface{}) (*resty.Response, error) {
-	headers := make(map[string]string)
-	headers["content-type"] = "application/json"
-	return DoPost(url, headers, param)
-}
-
-// PostFile POST文件上传 files传参 => 文件名:[param名:文件内容]
-func PostFile(url string, headers map[string]string, files map[string]map[string][]byte) (*resty.Response, error) {
+// Post with form-data content type
+func (ce ClientEntity) Post(param map[string]string) (*resty.Response, error) {
 	client := resty.New()
 	req := client.R()
-	if len(headers) > 0 {
-		req.SetHeaders(headers)
+	if len(ce.headers) > 0 {
+		req.SetHeaders(ce.headers)
 	}
-	if len(files) > 0 {
-		for fileName, paramKV := range files {
-			for paramName, fileBytes := range paramKV {
-				req.SetFileReader(paramName, fileName, bytes.NewReader(fileBytes))
-			}
-		}
+
+	if len(param) > 0 {
+		req.SetFormData(param)
 	}
-	result, err := req.Post(url)
+
+	result, err := req.Post(ce.url)
 	if err != nil {
-		fmt.Println("file post request error:", err)
+		fmt.Println("post request error:", err)
 		return nil, err
 	}
 	return result, nil
 }
 
-// PostMulti POST请求发送 multipart/form-data 数据
-func PostMulti(url string, headers map[string]string, files map[string]map[string][]byte,
-	params map[string]string) (*resty.Response, error) {
-
+// PostJson with application/json content type
+func (ce ClientEntity) PostJson(param map[string]interface{}) (*resty.Response, error) {
 	client := resty.New()
 	req := client.R()
-	if len(headers) > 0 {
-		req.SetHeaders(headers)
-	}
-	if len(files) > 0 {
-		for fileName, paramKV := range files {
-			for paramName, fileBytes := range paramKV {
-				req.SetFileReader(paramName, fileName, bytes.NewReader(fileBytes))
-			}
-		}
-	}
-	if len(params) > 0 {
-		req.SetFormData(params)
-	}
-
-	result, err := req.Post(url)
-	if err != nil {
-		fmt.Println("file post request error:", err)
-		return nil, err
-	}
-	return result, nil
-}
-
-// DoPost 模式使用json 格式作为传参
-func DoPost(url string, headers map[string]string, param map[string]interface{}) (*resty.Response, error) {
-	client := resty.New()
-	req := client.R()
-	if len(headers) > 0 {
-		req.SetHeaders(headers)
+	if len(ce.headers) > 0 {
+		req.SetHeaders(ce.headers)
 	}
 
 	if len(param) > 0 {
@@ -106,9 +81,35 @@ func DoPost(url string, headers map[string]string, param map[string]interface{})
 		}
 		req.SetBody(string(marshal))
 	}
-	result, err := req.Post(url)
+
+	result, err := req.Post(ce.url)
 	if err != nil {
-		fmt.Println("common post request error:", err)
+		fmt.Println("postJson request error:", err)
+		return nil, err
+	}
+	return result, nil
+}
+
+// PostFile with form-data and file params
+func (ce ClientEntity) PostFile(params map[string]string, file map[string][]byte) (*resty.Response, error) {
+	client := resty.New()
+	req := client.R()
+	if len(ce.headers) > 0 {
+		req.SetHeaders(ce.headers)
+	}
+	if len(file) > 0 {
+		for paramName, fileBytes := range file {
+			req.SetFileReader(paramName, paramName, bytes.NewReader(fileBytes))
+		}
+	}
+
+	if len(params) > 0 {
+		req.SetFormData(params)
+	}
+
+	result, err := req.Post(ce.url)
+	if err != nil {
+		fmt.Println("file post request error:", err)
 		return nil, err
 	}
 	return result, nil
