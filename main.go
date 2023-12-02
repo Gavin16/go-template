@@ -10,31 +10,31 @@ import (
 )
 
 func bindApi(router *gin.Engine) {
-	v1 := router.Group("/api/v1")
+	demo := router.Group("/api/demo")
 	{
-		example := v1.Group("/example")
-		{
-			example.GET("/hello", api.SayHello)
-		}
+		demo.GET("/hello", api.SayHello)
+		demo.GET("/getUserById", api.GetUserById)
 	}
-	router.GET("/hello", api.SayHello)
-
 	// swagger bind
 	url := ginSwagger.URL("http://localhost:8000/swagger/doc.json")
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	//bind service api as follows
-
 }
 
 // @title go-template(Replace with your app name)
 // @version 1.0
-// @description go web template(Replace with your description)
+// @description 请求状态码定义
+// @description code= 0, 调用成功
+// @description code=-1, 系统错误
+// @description code= 1, 提示接口返回的message
+// @description code=10, 登录token过期
+// @description code=20, 接口权限错误,没有权限访问该接口
 // @termsOfService http://localhost:8000/swagger/index.html
 // @license.name Apache 2.0
 // @host localhost:8000
-// @BasePath /api/v1
 func main() {
+	gin.ForceConsoleColor()
 	router := gin.Default()
 	addMiddleware(router)
 	bindApi(router)

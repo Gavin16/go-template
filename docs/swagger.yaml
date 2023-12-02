@@ -1,21 +1,137 @@
+definitions:
+  model.HTTPError:
+    properties:
+      code:
+        default: -1
+        description: 响应编码
+        format: int
+        type: integer
+      message:
+        default: 请求失败
+        description: 消息
+        format: string
+        type: string
+      success:
+        default: false
+        description: 是否请求成功
+        format: bool
+        type: boolean
+    type: object
+  model.Result:
+    properties:
+      code:
+        description: 响应编码
+        format: int
+        type: integer
+      data:
+        description: 响应结果
+        format: object
+      message:
+        default: ok
+        description: 消息
+        format: string
+        type: string
+      success:
+        description: 是否请求成功
+        format: bool
+        type: boolean
+      time:
+        description: 请求时间
+        format: string
+        type: string
+    type: object
+  model.User:
+    properties:
+      age:
+        default: 27
+        description: 年龄
+        type: integer
+      email:
+        default: JoeOK@gmail.com
+        description: 邮箱
+        type: string
+      id:
+        default: 1
+        description: ID
+        format: int64
+        type: integer
+      name:
+        default: Joe
+        description: 姓名
+        type: string
+      nation:
+        default: USA
+        description: 国籍
+        type: string
+      title:
+        default: engineer
+        description: 职位
+        type: string
+    type: object
+host: localhost:8000
 info:
   contact: {}
-  description: Your API description
+  description: |-
+    请求状态码定义
+    code= 0, 调用成功
+    code=-1, 系统错误
+    code= 1, 提示接口返回的message
+    code=10, 登录token过期
+    code=20, 接口权限错误,没有权限访问该接口
+  license:
+    name: Apache 2.0
   termsOfService: http://localhost:8000/swagger/index.html
-  title: Your Application Name
+  title: go-template(Replace with your app name)
   version: "1.0"
 paths:
-  /hello:
+  /api/demo/getUserById:
     get:
-      description: say 'hello' to given name
+      consumes:
+      - multipart/form-data
+      description: get user info by id
       parameters:
-      - description: 姓名
+      - description: 用户ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            $ref: '#/definitions/model.User'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/model.HTTPError'
+      summary: get user by id
+      tags:
+      - demo样例
+  /api/demo/hello:
+    get:
+      consumes:
+      - multipart/form-data
+      description: say hello to given name
+      parameters:
+      - description: 用户名
         in: query
         name: name
         required: true
         type: string
+      produces:
+      - application/json
       responses:
         "200":
-          description: OK
-      summary: sayHello
+          description: 成功
+          schema:
+            $ref: '#/definitions/model.Result'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/model.HTTPError'
+      summary: say hello
+      tags:
+      - demo样例
 swagger: "2.0"

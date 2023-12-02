@@ -8,11 +8,12 @@ import (
 )
 
 /**
- * 使用 resty 库实现http请求发送
- * 主要封装 GET,POST,PUT 三种请求方式 application/json, multipart/form-data 两种请求数据类型
+ * use resty to make http request
+ * request method : GET,POST,PUT
+ * content type : application/json, multipart/form-data
  */
 
-type HttpRequest interface {
+type HttpRequester interface {
 	Get(param map[string]string) (*resty.Response, error)
 	Post(param map[string]string) (*resty.Response, error)
 	PostJson(param map[string]interface{}) (*resty.Response, error)
