@@ -106,7 +106,7 @@ paths:
           description: 内部错误
           schema:
             $ref: '#/definitions/model.HTTPError'
-      summary: get user by id
+      summary: get user by id,返参为结构体对象
       tags:
       - demo样例
   /api/demo/hello:
@@ -131,7 +131,7 @@ paths:
           description: 内部错误
           schema:
             $ref: '#/definitions/model.HTTPError'
-      summary: say hello
+      summary: say hello,返参data为基本类型
       tags:
       - demo样例
 swagger: "2.0"

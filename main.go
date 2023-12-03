@@ -4,9 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"go-template/api"
-	_ "go-template/docs" // 这里需要引入,否则UI界面无法访问
-	"go-template/midware"
+	"minsky/go-template/api"
+	_ "minsky/go-template/docs" // 这里需要引入,否则UI界面无法访问
+	"minsky/go-template/midware"
 )
 
 func bindApi(router *gin.Engine) {

@@ -1,4 +1,4 @@
-module go-template
+module minsky/go-template
 
 go 1.20
 

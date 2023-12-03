@@ -31,7 +31,7 @@ const docTemplate = `{
                 "tags": [
                     "demo样例"
                 ],
-                "summary": "get user by id",
+                "summary": "get user by id,返参为结构体对象",
                 "parameters": [
                     {
                         "type": "integer",
@@ -69,7 +69,7 @@ const docTemplate = `{
                 "tags": [
                     "demo样例"
                 ],
-                "summary": "say hello",
+                "summary": "say hello,返参data为基本类型",
                 "parameters": [
                     {
                         "type": "string",

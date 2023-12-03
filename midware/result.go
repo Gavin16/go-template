@@ -2,8 +2,8 @@ package midware
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-template/model"
 	"log"
+	"minsky/go-template/model"
 	"net/http"
 )
 

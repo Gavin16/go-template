@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-template/model"
+	"minsky/go-template/model"
 	"net/http"
 	"strconv"
 )
