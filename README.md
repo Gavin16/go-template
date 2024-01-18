@@ -27,12 +27,3 @@
 
 ## 接口文档
 服务部署好之后,本地可通过 http://localhost:8000/swagger/index.html 访问
-
-## 测试
-AAAAA
-BBBBB
-CCCCC
-DDDDD
-EEEEE
-33333
-44444
