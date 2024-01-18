@@ -195,7 +195,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8000",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "go-template(Replace with your app name)",
+	Title:            "go-template(项目名)",
 	Description:      "请求状态码定义\ncode= 0, 调用成功\ncode=-1, 系统错误\ncode= 1, 提示接口返回的message\ncode=10, 登录token过期\ncode=20, 接口权限错误,没有权限访问该接口",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

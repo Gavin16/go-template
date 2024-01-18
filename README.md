@@ -20,9 +20,9 @@
 * Gin: 轻量级Web框架
 * GORM: ORM框架, 用于数据库连接
 * Go-Redis: Go Redis客户端
-* godotenv: 环境变量工具,方便实用环境变量
+* godotenv: 环境变量工具,方便获取环境变量
 * gin-swagger: 提供在线接口文档(需要执行swag安装: go get -u )
-
+* gods(Go Data Structures) : 提供常见集合工具List, Set, Stack,Tree,Queue的封装
 
 
 ## 接口文档

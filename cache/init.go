@@ -1,3 +1,6 @@
 package cache
 
-// Redis缓存初始化
+// cache init(redis, etcd)
+func init() {
+
+}

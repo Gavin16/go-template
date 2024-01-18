@@ -1,6 +1,6 @@
 package dal
 
-// 数据库连接初始化
+// database init(mysql, mongo, es)
 func init() {
 
 }

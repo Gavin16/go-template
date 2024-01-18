@@ -22,7 +22,7 @@ func bindApi(router *gin.Engine) {
 	//bind service api as follows
 }
 
-// @title go-template(Replace with your app name)
+// @title go-template(项目名)
 // @version 1.0
 // @description 请求状态码定义
 // @description code= 0, 调用成功
