@@ -82,7 +82,7 @@ info:
     name: Apache 2.0
   termsOfService: http://localhost:8000/swagger/index.html
   title: go-template(项目名)
-  version: "1.0"
+  version: "1.1"
 paths:
   /api/demo/getUserById:
     get:
@@ -108,7 +108,7 @@ paths:
             $ref: '#/definitions/model.HTTPError'
       summary: get user by id,返参为结构体对象
       tags:
-      - demo样例
+      - Business-Group
   /api/demo/hello:
     get:
       consumes:
