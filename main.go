@@ -4,9 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"minsky/go-template/api"
 	_ "minsky/go-template/docs" // 这里需要引入,否则UI界面无法访问
-	"minsky/go-template/midware"
+	"minsky/go-template/pkg/api"
+	midware2 "minsky/go-template/pkg/midware"
 )
 
 func bindApi(router *gin.Engine) {
@@ -23,7 +23,7 @@ func bindApi(router *gin.Engine) {
 }
 
 // @title go-template(项目名)
-// @version 1.0
+// @version 1.1
 // @description 请求状态码定义
 // @description code= 0, 调用成功
 // @description code=-1, 系统错误
@@ -45,16 +45,16 @@ func main() {
 }
 
 func addMiddleware(router *gin.Engine) {
-	router.Use(midware.Cors())
-	router.Use(midware.Recover)
+	router.Use(midware2.Cors())
+	router.Use(midware2.Recover)
 }
 
 // grammar-review
 //func main() {
-//circle := biz.Circle{Radius: 1.0}
+//circle := service.Circle{Radius: 1.0}
 //area1 := circle.Area()
 //fmt.Println(area1)
-//rect := biz.Rectangle{Width: 1, Height: 2}
+//rect := service.Rectangle{Width: 1, Height: 2}
 //area2 := rect.Area()
 //fmt.Println(area2)
 
@@ -89,11 +89,11 @@ func addMiddleware(router *gin.Engine) {
 //	}
 //
 //	// type convert: from interface to interface
-//	cc := biz.Circle{Radius: 1.0, XPos: 0, YPos: 1}
-//	shape := biz.Shape(cc)
+//	cc := service.Circle{Radius: 1.0, XPos: 0, YPos: 1}
+//	shape := service.Shape(cc)
 //	fmt.Println(shape.Area())
 //
-//	center := biz.Center(cc)
+//	center := service.Center(cc)
 //	fmt.Println(center.Position())
 //
 //	// 4. slice

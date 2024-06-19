@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"minsky/go-template/model"
+	"minsky/go-template/pkg/model"
 	"net/http"
 	"strconv"
 )
@@ -27,7 +27,7 @@ func SayHello(context *gin.Context) {
 
 // GetUserById
 // @Summary get user by id,返参为结构体对象
-// @Tags demo样例
+// @Tags Business-Group
 // @Param id query int true "用户ID"
 // @Description get user info by id
 // @Accept multipart/form-data

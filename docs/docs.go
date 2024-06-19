@@ -29,7 +29,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "demo样例"
+                    "Business-Group"
                 ],
                 "summary": "get user by id,返参为结构体对象",
                 "parameters": [
@@ -191,7 +191,7 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
+	Version:          "1.1",
 	Host:             "localhost:8000",
 	BasePath:         "",
 	Schemes:          []string{},
