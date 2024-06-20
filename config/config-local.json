@@ -1,0 +1,11 @@
+{
+  "register":{
+    "ipAddr": "127.0.0.1",
+    "serviceIp": "127.0.0.1",
+    "port": 30048
+  },
+  "config": {
+    "ipAddr": "127.0.0.1",
+    "port": 30048
+  }
+}

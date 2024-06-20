@@ -45,13 +45,13 @@ const docTemplate = `{
                     "200": {
                         "description": "成功",
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/models.User"
                         }
                     },
                     "500": {
                         "description": "内部错误",
                         "schema": {
-                            "$ref": "#/definitions/model.HTTPError"
+                            "$ref": "#/definitions/models.HTTPError"
                         }
                     }
                 }
@@ -83,13 +83,13 @@ const docTemplate = `{
                     "200": {
                         "description": "成功",
                         "schema": {
-                            "$ref": "#/definitions/model.Result"
+                            "$ref": "#/definitions/models.Result"
                         }
                     },
                     "500": {
                         "description": "内部错误",
                         "schema": {
-                            "$ref": "#/definitions/model.HTTPError"
+                            "$ref": "#/definitions/models.HTTPError"
                         }
                     }
                 }
@@ -97,7 +97,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "model.HTTPError": {
+        "models.HTTPError": {
             "type": "object",
             "properties": {
                 "code": {
@@ -120,7 +120,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Result": {
+        "models.Result": {
             "type": "object",
             "properties": {
                 "code": {
@@ -150,7 +150,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.User": {
+        "models.User": {
             "type": "object",
             "properties": {
                 "age": {

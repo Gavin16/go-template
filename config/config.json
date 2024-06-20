@@ -1,0 +1,15 @@
+{
+  "alg": {
+    "address": {
+      "auto-label": "http://192.168.20.111:5000/drseg_predict"
+    },
+    "macularRadius": 0.25
+  },
+  "graph": {
+    "filter-thres": 4
+  },
+  "user": {
+    "aiUserId": 11111111,
+    "aiUserName": "AI001"
+  }
+}

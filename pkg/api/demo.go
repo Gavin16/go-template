@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"minsky/go-template/pkg/model"
+	"minsky/go-template/pkg/models"
 	"net/http"
 	"strconv"
 )
@@ -14,14 +14,14 @@ import (
 // @Description say hello to given name
 // @Accept multipart/form-data
 // @Produce json
-// @Success 200 {object} model.Result "成功"
-// @Failure 500 {object} model.HTTPError "内部错误"
+// @Success 200 {object} models.Result "成功"
+// @Failure 500 {object} models.HTTPError "内部错误"
 // @Router /api/demo/hello [get]
 func SayHello(context *gin.Context) {
 	request := context.Request
 	name := request.FormValue("name")
 	resp := "Hello," + name
-	success := model.BuildSuccess(resp)
+	success := models.BuildSuccess(resp)
 	context.IndentedJSON(http.StatusOK, success)
 }
 
@@ -32,14 +32,14 @@ func SayHello(context *gin.Context) {
 // @Description get user info by id
 // @Accept multipart/form-data
 // @Produce json
-// @Success 200 {object} model.User "成功"
-// @Failure 500 {object} model.HTTPError "内部错误"
+// @Success 200 {object} models.User "成功"
+// @Failure 500 {object} models.HTTPError "内部错误"
 // @Router /api/demo/getUserById [get]
 func GetUserById(context *gin.Context) {
 	request := context.Request
 	userId := request.FormValue("id")
 
-	user := model.User{}
+	user := models.User{}
 	user.Id, _ = strconv.ParseInt(userId, 10, 64)
 	user.Name = "Mostly"
 	user.Age = 31
@@ -47,6 +47,6 @@ func GetUserById(context *gin.Context) {
 	user.Email = "Mostly@gmail.com"
 	user.Nation = "USA"
 
-	success := model.BuildSuccess(user)
+	success := models.BuildSuccess(user)
 	context.IndentedJSON(http.StatusOK, success)
 }

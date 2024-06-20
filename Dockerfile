@@ -11,7 +11,7 @@ RUN apk --no-cache add make gcc libc-dev git
 # create and use work directory
 WORKDIR /app
 
-#copy go model file
+#copy go models file
 COPY go.mod go.sum ./
 RUN go mod download
 # copy project source file to work dir
@@ -28,6 +28,7 @@ RUN apk --no-cache add ca-certificates
 
 COPY --from=builder /app/executable .
 COPY --from=builder /app/config ./config
+COPY --from=builder /app/docs   ./docs
 
 ARG env
 ENV env=${env:-prod}

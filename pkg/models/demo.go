@@ -1,4 +1,4 @@
-package model
+package models
 
 type User struct {
 	Id     int64  `json:"id" format:"int64" default:"1"`   // ID

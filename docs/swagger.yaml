@@ -1,5 +1,5 @@
 definitions:
-  model.HTTPError:
+  models.HTTPError:
     properties:
       code:
         default: -1
@@ -17,7 +17,7 @@ definitions:
         format: bool
         type: boolean
     type: object
-  model.Result:
+  models.Result:
     properties:
       code:
         description: 响应编码
@@ -40,7 +40,7 @@ definitions:
         format: string
         type: string
     type: object
-  model.User:
+  models.User:
     properties:
       age:
         default: 27
@@ -101,11 +101,11 @@ paths:
         "200":
           description: 成功
           schema:
-            $ref: '#/definitions/model.User'
+            $ref: '#/definitions/models.User'
         "500":
           description: 内部错误
           schema:
-            $ref: '#/definitions/model.HTTPError'
+            $ref: '#/definitions/models.HTTPError'
       summary: get user by id,返参为结构体对象
       tags:
       - Business-Group
@@ -126,11 +126,11 @@ paths:
         "200":
           description: 成功
           schema:
-            $ref: '#/definitions/model.Result'
+            $ref: '#/definitions/models.Result'
         "500":
           description: 内部错误
           schema:
-            $ref: '#/definitions/model.HTTPError'
+            $ref: '#/definitions/models.HTTPError'
       summary: say hello,返参data为基本类型
       tags:
       - demo样例
