@@ -23,7 +23,7 @@ func bindApi(router *gin.Engine) {
 }
 
 // @title go-template(项目名)
-// @version 1.1
+// @version v1.2
 // @description 请求状态码定义
 // @description code= 0, 调用成功
 // @description code=-1, 系统错误
@@ -33,6 +33,8 @@ func bindApi(router *gin.Engine) {
 // @termsOfService http://localhost:8000/swagger/index.html
 // @license.name Apache 2.0
 // @host localhost:8000
+//
+//go:generate go run github.com/swaggo/swag/cmd/swag init
 func main() {
 	gin.ForceConsoleColor()
 	router := gin.Default()
