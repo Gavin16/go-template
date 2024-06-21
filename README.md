@@ -28,10 +28,12 @@
 * gods(Go Data Structures) : 提供常见集合工具List, Set, Stack,Tree,Queue的封装
 
 
-## 使用方式
-```go
+## 部署使用
+### 本地启动
+在根路径下直接使用 `make` 指令(环境需要支撑)，即可完成模块依赖下载, API文档生成 和 服务启动
 
-```
+### 远程部署
+使用 Dockerfile 进行构建和部署
 
 ## 接口文档
 服务部署好之后,本地可通过 http://localhost:8000/swagger/index.html 访问

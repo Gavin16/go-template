@@ -13,12 +13,16 @@ WORKDIR /app
 
 #copy go models file
 COPY go.mod go.sum ./
+#download swag
+RUN go get -u github.com/swaggo/swag/cmd/swag
+#download other model
 RUN go mod download
+
 # copy project source file to work dir
 COPY . .
 
 # exec Makefile
-RUN make
+RUN go run github.com/swaggo/swag/cmd/swag init
 # compile go source file to app dir
 RUN go build -o ./executable
 

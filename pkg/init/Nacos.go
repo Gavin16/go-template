@@ -59,8 +59,8 @@ func register() {
 	}
 	success, err := namingClient.RegisterInstance(vo.RegisterInstanceParam{
 		Ip:          serviceIp,
-		Port:        8288,
-		ServiceName: "algorithm-integrate",
+		Port:        8799,
+		ServiceName: "go-template",
 		Weight:      10,
 		Enable:      true,
 		Healthy:     true,
