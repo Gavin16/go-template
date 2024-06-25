@@ -21,6 +21,7 @@ func init() {
 }
 
 // Register to Nacos
+// reference to https://github.com/nacos-group/nacos-sdk-go?tab=readme-ov-file#quick-examples
 func register() {
 
 	serviceIp := viper.GetString("register" + ".serviceIP")

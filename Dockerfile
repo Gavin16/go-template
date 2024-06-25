@@ -6,7 +6,7 @@ ENV GO111MODULE=on \
     PORT=8799
 
 # install makefile tools
-RUN apk --no-cache add make gcc libc-dev git
+#RUN apk --no-cache add make gcc libc-dev git
 
 # create and use work directory
 WORKDIR /app

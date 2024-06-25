@@ -3,16 +3,15 @@ GO_CMD = go
 SWAG_CMD = github.com/swaggo/swag/cmd/swag
 
 
-.PHONY: all clean tidy swag-install swag-init run
-all: clean tidy swag-install swag-init run
-build: clean tidy swag-install swag-init
+.PHONY: all clean swag-install swag-init tidy compile
+init: clean swag-install swag-init tidy
+build: clean swag-install swag-init tidy compile
+all: clean swag-install swag-init tidy compile run
+
 
 clean:
 	@echo "Cleaning up ..."
 	rm -rf docs/*
-
-tidy:
-	$(GO_CMD) mod tidy
 
 swag-install:
 	$(GO_CMD) get -u $(SWAG_CMD)
@@ -21,8 +20,11 @@ swag-init:
 	@echo "Generating API documentation..."
 	$(GO_CMD) run github.com/swaggo/swag/cmd/swag init
 
-#compile:
-#	$(GO_CMD) build -o ./
+tidy:
+	$(GO_CMD) mod tidy
+
+compile:
+	$(GO_CMD) build -o ./go-template
 
 run:
-	$(GO_CMD) run main.go
+	./go-template
