@@ -6,39 +6,6 @@ import (
 	"time"
 )
 
-// Shape
-// interface usage demo
-type Shape interface {
-	Area() float64
-}
-
-type Center interface {
-	Position() (float64, float64)
-}
-
-type Rectangle struct {
-	Width  float64
-	Height float64
-}
-
-type Circle struct {
-	Radius float64
-	XPos   float64
-	YPos   float64
-}
-
-func (c Circle) Area() float64 {
-	return 3.14 * c.Radius * c.Radius
-}
-
-func (c Circle) Position() (float64, float64) {
-	return c.XPos, c.YPos
-}
-
-func (r Rectangle) Area() float64 {
-	return r.Width * r.Height
-}
-
 // 包级变量: package 级别可见, 如果需要导出变量，则该包级变量也可以视为全局变量
 // 包级变量需要使用 var 声明
 // 推荐使用 如下声明方式
@@ -85,50 +52,54 @@ const (
 	s = "hello,gopher"
 )
 
-func main() {
-	h := c
-	ss := s
-	fmt.Println("------------")
-	fmt.Printf("%T\n", h)
-	fmt.Printf("%T\n", ss)
-
-	// 切片的实现原理及应用
-	var ar = [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-	var sl1 = ar[3:7] // ar中下标为3,4,5,6 四个元素，不含7
-	var sl2 = ar[4:8]
-	fmt.Printf("slice sl1=%v\n", sl1)
-	fmt.Printf("sl2=%v\n", sl2)
-	sl1[1] = 15
-	fmt.Printf("sl2=%v\n", sl2)
-	fmt.Printf("slice ar=%T\n", ar)
-	fmt.Printf("tpye of sl1=%T\n", sl1)
-	fmt.Printf("cap of sl1=%d\n", cap(sl1))
-
-	// 使用make 创建slice 第一个参数 len 代表slice已使用长度,同时也意味着append 操作的开始位置
-	// 因此无特殊情况，len 一般都设置为 0
-	var sl3 = make([]int, 0, 2)
-	var sl4 = make([]int, 1, 2)
-	sl3 = append(sl3, 3)
-	sl3 = append(sl3, 4)
-	fmt.Printf("sl3=%v,len=%v,cap=%v\n", sl3, len(sl3), cap(sl3))
-	sl4 = append(sl4, 5)
-	sl4 = append(sl4, 6)
-	fmt.Printf("sl4=%v,len=%v,cap=%v\n", sl4, len(sl4), cap(sl4))
-
-	sl5 := []string{"a", "b", "c", "d"}
-	for i, v := range sl5 {
-		fmt.Printf("i=%v, v=%v\n", i, v)
-	}
-
-	// 表达式求值
-	pkgExpEvaluation()
-	expressEvaluation()
-	// 理解代码块和作用域
-	fmt.Println("-----------")
-	quiz()
-	fmt.Println("-----------")
-	testStrUnicode()
-}
+//func main() {
+//	h := c
+//	ss := s
+//	fmt.Println("------------")
+//	fmt.Printf("%T\n", h)
+//	fmt.Printf("%T\n", ss)
+//
+//	// 切片的实现原理及应用
+//	var ar = [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+//	var sl1 = ar[3:7] // ar中下标为3,4,5,6 四个元素，不含7
+//	var sl2 = ar[4:8]
+//	fmt.Printf("slice sl1=%v\n", sl1)
+//	fmt.Printf("sl2=%v\n", sl2)
+//	sl1[1] = 15
+//	fmt.Printf("sl2=%v\n", sl2)
+//	fmt.Printf("slice ar=%T\n", ar)
+//	fmt.Printf("tpye of sl1=%T\n", sl1)
+//	fmt.Printf("cap of sl1=%d\n", cap(sl1))
+//
+//	// 使用make 创建slice 第一个参数 len 代表slice已使用长度,同时也意味着append 操作的开始位置
+//	// 因此无特殊情况，len 一般都设置为 0
+//	var sl3 = make([]int, 0, 2)
+//	var sl4 = make([]int, 1, 2)
+//	sl3 = append(sl3, 3)
+//	sl3 = append(sl3, 4)
+//	fmt.Printf("sl3=%v,len=%v,cap=%v\n", sl3, len(sl3), cap(sl3))
+//	sl4 = append(sl4, 5)
+//	sl4 = append(sl4, 6)
+//	fmt.Printf("sl4=%v,len=%v,cap=%v\n", sl4, len(sl4), cap(sl4))
+//
+//	sl5 := []string{"a", "b", "c", "d"}
+//	for i, v := range sl5 {
+//		fmt.Printf("i=%v, v=%v\n", i, v)
+//	}
+//
+//	// 表达式求值
+//	pkgExpEvaluation()
+//	expressEvaluation()
+//	// 理解代码块和作用域
+//	fmt.Println("-----------")
+//	quiz()
+//	fmt.Println("-----------")
+//	testStrUnicode()
+//	fmt.Println("-----------")
+//	testForRangeVar()
+//	fmt.Println("-----------")
+//	testBreak()
+//}
 
 // ** 使用iota 实现枚举常量
 // iota 是go语言的一个预定义标识符，它表示const声明块中每个常量所处位置在块中的偏移值
@@ -165,10 +136,10 @@ var mm map[string]int
 
 // mm["go"] = 1 // 错误
 // 此外还需要注意尽量避免值复制
-var mu sync.Mutex
+//var mu sync.Mutex
 
 // mu1 := mu // 错误
-var mu1 *sync.Mutex = &mu // 指针复制是可以的
+//var mu1 *sync.Mutex = &mu // 指针复制是可以的
 
 // ** 使用符合字面值作为初值构造器
 // 对于较为复杂的符合类型
@@ -355,4 +326,125 @@ func testStrUnicode() {
 	var strs = `野径云俱黑
 江船火烛明`
 	fmt.Println(strs)
+}
+
+// ** Go控制语句惯用法和注意事项
+// 1. 出现错误逻辑时，快速返回
+// 2. 成功逻辑不要嵌入到if-else 语句中
+// 3. "快乐路径"的执行逻辑在代码布局上始终靠左, 这样读者可以一眼看到该函数的正常逻辑流程
+// 4. "快乐路径"的返回值一般在函数的最后一行, 就像上面伪代码段1中的那样
+
+// 注意for range 中声明变量的作用域
+func testForRangeVar() {
+	a := [...]int{1, 2, 3, 4, 5}
+	// 并发访问range 中的局部变量时 可能拿到的都是最后相同的值
+	// 建议增加闭包函数的传参,然后将 i,v 以参数形式传过去
+	for i, v := range a {
+		go func() {
+			time.Sleep(100 * time.Microsecond)
+			fmt.Println(i, v)
+		}()
+	}
+	time.Sleep(200 * time.Millisecond)
+
+	// 尝试修改数组a 中的内容
+	// 结果无法修改，因为a 是数组，数组在 range 语句中是通过值传递，range 遍历的是a的副本
+	fmt.Println("--------------")
+	fmt.Println("a = ", a)
+	r := make([]int, 0, 5)
+	for i, v := range a {
+		if i == 0 {
+			a[1] = 12
+			a[2] = 13
+		}
+		r = append(r, v)
+	}
+	fmt.Println("r = ", r)
+	fmt.Println("a = ", a)
+
+	// 对切片进行遍历, 由于切片实际存储的是一个(*T, len, cap)的三元组， *T指向的是底层数组的指针
+	// 因此即使 range 遍历的是 切片的副本 也同样能通过*T 指针修改到底层的数组
+	fmt.Println("------------")
+	s := []int{1, 2, 3, 4, 5}
+	rs := make([]int, 0, 5)
+	for i, v := range s {
+		if i == 0 {
+			s[1] = 12
+			s[2] = 13
+		}
+		rs = append(rs, v)
+	}
+	fmt.Println("s = ", s)
+	fmt.Println("r = ", rs)
+
+	// 此range 遍历其它类型的表达式(string, map, channel) 依然使用的是这些变量的副本
+	// 具体特性需要根据变量类型的存储方式确定
+
+	// 当遍历字符串时, range 遍历出来的每个元素都是 rune
+	fmt.Println("--------------")
+	var sc = "我们中国人"
+	var se = "we Chinese"
+	for i, v := range sc {
+		fmt.Printf("%d  %s 0x%x %T\n", i, string(v), v, v)
+	}
+	for i, v := range se {
+		fmt.Printf("%d  %s 0x%x %T\n", i, string(v), v, v)
+	}
+
+	// 遍历map时， map在Go运行时表示为一个hmap的描述指针，因此该指针的副本也指向同一个hmap描述符
+	// 循环过程中对map 进行修改时可以修改到底层存储的数据，但是
+	// 由于map 遍历的顺序具有不确定性，修改的内容譬如 新增,删除 的操作，有可能因为顺序的原因，不会出现在后续的遍历中
+	fmt.Println("-------------")
+	var m = map[string]int{
+		"tony": 21,
+		"tom":  22,
+		"Jim":  23,
+	}
+	counter := 0
+	for k, v := range m {
+		if counter == 0 {
+			delete(m, "tony")
+		}
+		counter++
+		fmt.Println(k, v)
+	}
+	fmt.Println("counter is:", counter)
+	fmt.Println("m len is:", len(m))
+
+	// channel 使用for range 遍历
+	var c = make(chan int)
+	go func() {
+		time.Sleep(200 * time.Millisecond)
+		c <- 1
+		c <- 2
+		c <- 3
+		// 若不关闭channel 另一端读取时会一直阻塞
+		// go检测机制会发现死锁并报错 fatal error: all goroutines are asleep - deadlock!
+		close(c)
+	}()
+	for v := range c {
+		fmt.Println(v)
+	}
+}
+
+func testBreak() {
+	// 默认情况下(不接label时)break 语句只会跳出同一函数内break 语句所在的最内层的for,switch 和 select语句
+	// 若希望break 跳出到指定位置, 需要定义label,然后再break 后指定label
+	exit := make(chan interface{})
+	go func() {
+	loop:
+		for {
+			select {
+			case <-time.After(time.Second):
+				fmt.Println("tick")
+			case <-exit:
+				fmt.Println("exiting...")
+				break loop
+			}
+		}
+		fmt.Println("exit!")
+	}()
+	time.Sleep(3 * time.Second)
+	exit <- struct{}{}
+	time.Sleep(500 * time.Millisecond)
 }
