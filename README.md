@@ -1,5 +1,5 @@
 # go-template 项目
-定义GO Web CRUD开发项目包模板,按项目一般组织结构封装配置读取,接口定义,中间件使用等
+定义GO Web 开发项目包模板,按项目一般组织结构封装配置读取,接口定义,中间件使用等
 
 
 ## 包模块
@@ -20,21 +20,44 @@
 
 
 ## 依赖组件
-* Gin: 轻量级Web框架
-* GORM: ORM框架, 用于数据库连接
-* Go-Redis: Go Redis客户端
-* godotenv: 环境变量工具,方便获取环境变量
-* gin-swagger: 提供在线接口文档(需要执行swag安装: go get -u )
-* gods(Go Data Structures) : 提供常见集合工具List, Set, Stack,Tree,Queue的封装
+| 组件          | 描述       | 版本      |
+|:------------|:---------|---------|
+| gin         | 轻量级Web框架 | v1.10.0 |
+| GORM        | ORM框架    |         |
+| go-Redis    | Redis客户端 |         | 
+| viper       | 读取配文件工具  | v1.19.0 | 
+| gin-swagger | 提供在线接口文档 | v1.6.0  | 
+| gods        | 常见集合工具封装 |         |
 
 
 ## 部署使用
 ### 本地启动
 在根路径下直接使用 `make` 指令(环境需要支撑)，即可完成模块依赖下载, API文档生成 和 服务启动。  
-若只希望下载依赖和生成API文档，可以执行 `make init`.
+若只希望下载依赖和生成API文档，可以执行 `make init`. 之后可以直接启动项目。
 
-### 远程部署
-使用 Dockerfile 进行构建和部署
+也可以手动执行如下指令启动项目
+```bash
+  go mod tidy
+  go get -u github.com/swaggo/swag/cmd/swag
+  go run run github.com/swaggo/swag/cmd/swag init
+```
+然后便可在本地启动项目。
+
+
+### 服务器部署
+宿主机部署
+```bash
+  cd go-template
+  make build
+  nohup ./go-template > go-template.log 2>&1 &
+```
+
+容器化部署
+```bash
+  cd go-template
+  docker build -t yourRepo/go-template .
+  docker run -d --name go-template -p 8799:8799 yourRepo/go-template
+```
 
 ## 接口文档
 服务部署好之后,本地可通过 http://localhost:8000/swagger/index.html 访问
