@@ -1,10 +1,11 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
 	"minsky/go-template/pkg/models"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 // SayHello

@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "minsky/go-template/docs" // swagger WebUI访问需要
 	"minsky/go-template/pkg/api"
 	_ "minsky/go-template/pkg/init" // 触发viper读取json配置
 	midware2 "minsky/go-template/pkg/midware"
+
+	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func bindApi(router *gin.Engine) {

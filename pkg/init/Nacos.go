@@ -3,21 +3,22 @@ package init
 import (
 	"bytes"
 	"fmt"
+	"log"
+	_ "minsky/go-template/pkg/conf"
+
 	"github.com/nacos-group/nacos-sdk-go/v2/clients"
 	"github.com/nacos-group/nacos-sdk-go/v2/clients/config_client"
 	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 	"github.com/spf13/viper"
-	"log"
-	_ "minsky/go-template/pkg/conf"
 )
 
 // Service Register and Reading Dynamic Config
 // merge nacos dynamic config into viper
 
 func init() {
-	register()
-	downloadConfig()
+	//register()
+	//downloadConfig()
 }
 
 // Register to Nacos
