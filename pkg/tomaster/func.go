@@ -3,7 +3,10 @@ package main
 import (
 	"C"
 	"fmt"
+	"io"
 	"os"
+	"reflect"
+	"strings"
 	"sync"
 )
 
@@ -20,48 +23,6 @@ import (
 // 无论是执行到函数尾部返回 还是在某个错误处理分支显示调用return 返回
 // 又或者出现panic, 已经存储到 deferred 函数栈中的函数都会被调度执行
 // 因此，deferred 函数是 一个在任何情况下都可以为函数进行收尾工作的好场合
-
-func main() {
-	// MyAdderFunc 定义成了 func(int,int) int 的别名
-	// 此外 MyAdderFunc 的底层类型和 MyAdder 是一样的
-	// 因此可以将 MyAdder 显示转换为 HandlerFunc 类型
-	// 由于MyAdderFunc 实现了 BinaryAdder 的接口
-	// 因此可以直接将结果(函数)赋值给 BinaryAdder 类型
-	var adder BinaryAdder = MyAdderFunc(MyAdder)
-	fmt.Println(adder.Add(5, 6))
-
-	// 相当于将times 拆分成两个单参数的函数
-	timesTwo := partialTimes(2)
-	fmt.Println(timesTwo(5))
-
-	// 函子的应用
-	// 函子是一个容器类型, 它实现了一个接受函数类型的参数，并在容器中每个元素上应用那个函数，得到一个新函子
-	// 原函子容器内部的元素值不受影响
-	intSlice := []int{1, 2, 3, 4, 5}
-	fmt.Printf("init a functor from int slice:%v\n", intSlice)
-	f := NewIntSliceFunctor(intSlice)
-	mapperFunc1 := func(i int) int {
-		return i + 10
-	}
-	mapped1 := f.fMap(mapperFunc1)
-	fmt.Printf("mapped functor1: %+v\n", mapped1)
-
-	fmt.Printf("origin functor:%+v\n", f)
-
-	// 使用defer 进行收尾处理
-	// 其中有几个关键问题
-	// 1. 明确哪些函数可以直接放在defer 后面使用,哪些需要自定义(匿名)函数进行包装
-	//    -- 对于内置函数: close,copy,delete,print,recover 可以直接使用
-	//                   append, cap, len, make, new 不可以直接作为 deferred 的函数
-	// 2. 把握defer 关键字后表达式的求值时机
-	//    -- defer 关键字后面的表达式是在将 deferred 函数注册到 deferred 函数栈的时候进行求值的
-	//       所以以下 debugLogPrint 日志打印功能才能实现前后切面的日志打印
-	_ = writeToFile()
-	fmt.Println("--------------")
-	modifyReturnValue()
-	debugLogPrint()
-	deferEvaluate()
-}
 
 // BinaryAdder --- 函数显示转换
 type BinaryAdder interface {
@@ -201,4 +162,203 @@ func deferEvaluate() {
 		_ = sl
 	}
 	func4()
+}
+
+// T -- 方法本质测试
+// 一个以方法所绑定类型实例作为第一个参数的普通函数
+type T struct {
+	a int
+}
+
+func (t *T) get() int {
+	return t.a
+}
+func (t *T) set(a int) {
+	t.a = a
+}
+func get(t *T) int {
+	return t.a
+}
+func set(t *T, a int) {
+	t.a = a
+}
+func essenceOfMethod() {
+	fmt.Println("--------------")
+	tt := T{1}
+	a := tt.get()
+	fmt.Println(a)
+	a = get(&tt)
+	fmt.Println(a)
+	tt.set(3)
+	fmt.Println(tt)
+	set(&tt, 5)
+	fmt.Println(tt)
+	// 将 func (t *T) get() int 赋值给 f1
+	// 结果 f1 变成了 func get(t *T) int
+	f1 := (*T).get
+	res := f1(&tt)
+	fmt.Println(res)
+}
+
+// DumpMethodSet
+// -- 方法集合决定接口实现
+// 打印接口包含的方法集合
+func DumpMethodSet(i interface{}) {
+	v := reflect.TypeOf(i)
+	elemType := v.Elem()
+	num := elemType.NumMethod()
+	if num == 0 {
+		fmt.Printf("%s's method set is empty\n", elemType)
+		return
+	}
+	fmt.Printf("%s's method set is:\n", elemType)
+	for j := 0; j < num; j++ {
+		fmt.Println("-", elemType.Method(j).Name)
+	}
+	fmt.Printf("\n")
+}
+
+type Interface interface {
+	M1()
+	M2()
+}
+type TT struct{}
+
+func (t TT) M1()  {}
+func (t *TT) M2() {}
+
+// 对于非接口类型的自定义类型T, 起方法集合有所有receiver 为T类型的方法组成
+// 而类型为 *T的方法集合则包含 所有receiver为T和*T类型的方法
+func testMethodSetRules() {
+	var tt TT
+	var ptt *TT
+	DumpMethodSet(&tt)
+	DumpMethodSet(&ptt)
+	DumpMethodSet((*Interface)(nil))
+
+	fmt.Println("-------------")
+	DumpMethodSet((*io.Writer)(nil))
+	DumpMethodSet((*io.Reader)(nil))
+	DumpMethodSet((*io.Closer)(nil))
+	DumpMethodSet((*io.ReadWriter)(nil))
+	DumpMethodSet((*io.ReadWriteCloser)(nil))
+}
+
+// I1 结构体类型嵌入接口类型的同时 也实现了接口类型的方法
+// 若接口体类型 自己也实现了接口接口类型中的某个方法，在调用时优先使用自己实现的方法
+type I1 interface {
+	M4()
+	M5()
+	M6()
+}
+type T2 struct {
+	I1
+}
+
+func (t *T2) M4() {
+	fmt.Println("T2's Method4")
+}
+
+type S struct{}
+
+func (s *S) M4() {
+	fmt.Println("S's Method4")
+}
+func (s *S) M5() {
+	fmt.Println("S's Method5")
+}
+func (s *S) M6() {
+	fmt.Println("S's Method6")
+}
+
+func testEmbedMethodOrder() {
+	fmt.Println("------------")
+	var t2 = T2{
+		I1: &S{},
+	}
+	// T2 结构体在定义的时候 只实现了 M4
+	// 但是在使用的时候 S 实现的M5,M6 也能直接调用到
+	t2.M4()
+	t2.M5()
+	t2.M6()
+}
+
+// 基于一个类型创建另一个类型 主要有两种方式
+// 1. 使用 defined 类型 如: type myInterface I
+// 2. 使用 类型别名  如 type myInterface=I
+// 如果使用define类型, defined 类型能否继承到 原有(underlying) 类型的方法需要分情况来看
+// -- (1) 如果defined 类型是基于接口创建的，那么接口中所有的方法, defined 类型都能继承到
+// -- (2) 如果defined 类型是基于非接口类型创建的，那么defined 类型的方法集合为空, 原有类型的方法需要它重新实现一遍
+// 如果是使用类型别名 定义的新类型
+// -- 新类型和原有类型 具有完全相同的 方法集合
+// -- 事实上 rune 类型就是 int32 的类型别名, 使用 fmt.Printf 查看类型时看到的是 int32
+
+type T3 struct{}
+
+func (T3) M7()  {}
+func (*T3) M8() {}
+
+type Interface1 interface {
+	M7()
+	M8()
+}
+type T4 T3
+type Interface2 Interface1
+
+func testMethodSetExtends() {
+	fmt.Println("------------")
+	var t3 T3
+	var pt3 *T3
+	var t4 T4
+	var pt4 *T4
+
+	DumpMethodSet(&t3)
+	DumpMethodSet(&t4)
+	DumpMethodSet(&pt3)
+	DumpMethodSet(&pt4)
+
+	DumpMethodSet((*Interface1)(nil))
+	DumpMethodSet((*Interface2)(nil))
+
+	str := "hello"
+	rs := []rune(str)
+	fmt.Printf("type of rune is: %T\n", rs[0])
+}
+
+func testVariadicFuncArgs() {
+	fmt.Println("------------")
+	//fmt.Println(concat("-", 1, 2, 3))
+	fmt.Println(concat("-", "hello", 1, 2, "world", 3, []string{"test", "args"}))
+}
+
+func concat(sep string, args ...interface{}) string {
+	result := ""
+	for i, arg := range args {
+		if i != 0 {
+			result += sep
+		}
+		switch arg := arg.(type) {
+		case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+			result += fmt.Sprintf("%v", arg)
+		case string:
+			result += arg
+		case []int:
+			nums := make([]string, 0, len(arg))
+			for _, i := range arg {
+				nums = append(nums, fmt.Sprintf("%v", i))
+			}
+			join := strings.Join(nums, sep)
+			result += join
+		case []string:
+			strs := make([]string, 0, len(arg))
+			for _, sss := range arg {
+				strs = append(strs, sss)
+			}
+			result += strings.Join(strs, sep)
+		default:
+			fmt.Println("unknown arg type:", reflect.TypeOf(arg))
+			return ""
+		}
+	}
+	return result
 }

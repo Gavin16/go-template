@@ -1,10 +1,12 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
+	"minsky/go-template/pkg/biz"
 	"minsky/go-template/pkg/models"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 // SayHello
@@ -38,14 +40,9 @@ func SayHello(context *gin.Context) {
 func GetUserById(context *gin.Context) {
 	request := context.Request
 	userId := request.FormValue("id")
-
-	user := models.User{}
-	user.Id, _ = strconv.ParseInt(userId, 10, 64)
-	user.Name = "Mostly"
-	user.Age = 31
-	user.Title = "marketing"
-	user.Email = "Mostly@gmail.com"
-	user.Nation = "USA"
+	id, _ := strconv.ParseInt(userId, 10, 64)
+	userService := biz.UserSvcImpl{}
+	user := userService.GetUserById(id)
 
 	success := models.BuildSuccess(user)
 	context.IndentedJSON(http.StatusOK, success)
