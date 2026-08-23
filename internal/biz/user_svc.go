@@ -1,7 +1,7 @@
 package biz
 
 import (
-	models "minsky/go-template/pkg/models"
+	models "minsky/go-template/internal/models"
 )
 
 type UserSvc interface {

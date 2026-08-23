@@ -1,10 +1,11 @@
 package midware
 
 import (
-	"github.com/gin-gonic/gin"
 	"log"
-	"minsky/go-template/pkg/models"
+	"minsky/go-template/internal/models"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Recover error request recovery
