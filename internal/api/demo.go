@@ -64,6 +64,57 @@ func ContextTimeOut(c *gin.Context) {
 	c.Data(resp.StatusCode, resp.Header.Get("Content-Type"), body)
 }
 
+// CtxValueTest context 传参
+func CtxValueTest(c *gin.Context) {
+	ctx := c.Request.Context()
+	newCtx := context.WithValue(ctx, "KEY", "testVal")
+	go func() {
+		val := newCtx.Value("KEY")
+		slog.Info("child context value:", "val", val)
+	}()
+
+	// 创建含超时时间的 child context
+	tmCtx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
+
+	result := make(chan string, 1)
+
+	go func(c context.Context) {
+		timer := time.NewTimer(2 * time.Second)
+		defer timer.Stop()
+
+		select {
+		case <-c.Done():
+			slog.Info("child context done:", "err", c.Err())
+			result <- "context done"
+		case <-timer.C:
+			slog.Info("定时时长2秒结束")
+			result <- "timer done"
+		}
+	}(tmCtx)
+	selectResult := <-result
+
+	// context 取消信号向下传播
+	cCtx, cancel2 := context.WithCancel(ctx)
+	go func(c context.Context) {
+		tmCtx2, cancel2 := context.WithTimeout(c, 2*time.Second)
+		defer cancel2()
+		select {
+		case <-c.Done():
+			slog.Info("parent context canceled:", "err", c.Err())
+			break
+		case <-tmCtx2.Done():
+			slog.Info("child context timeout:", "err", tmCtx2.Err())
+			break
+		}
+		fmt.Println("parent context:", c.Err())
+		fmt.Println("child context:", tmCtx2.Err())
+	}(cCtx)
+	time.Sleep(3 * time.Second)
+	cancel2()
+	c.JSON(http.StatusOK, models.BuildSuccess(selectResult))
+}
+
 // DelayService 延时等待5秒
 func DelayService(c *gin.Context) {
 	ctx := c.Request.Context()

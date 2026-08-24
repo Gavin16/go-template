@@ -23,6 +23,7 @@ func BindApi(router *gin.Engine) {
 	{
 		feature.GET("/cxtTimeOut", api.ContextTimeOut)
 		feature.GET("/delay", api.DelayService)
+		feature.GET("/ctxValues", api.CtxValueTest)
 		feature.GET("/rateTest", midware2.ConcurrentLimit(1), api.TesteRateLimit)
 	}
 
