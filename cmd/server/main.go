@@ -67,15 +67,15 @@ func main() {
 		slog.Info("收到关闭信号:", context.Cause(appCtx))
 	case err := <-serverErr:
 		if err != nil {
-			slog.Info("HTTP 服务异常退出:", err)
+			slog.Info("HTTP 服务异常退出,", "错误:", err)
 		} else {
-			slog.Info("HTTP 服务已经停止")
+			slog.Info("HTTP 服务已经停止!")
 		}
 	}
 
 	stopSignal()
 
-	slog.Info("HTTP服务开始关闭")
+	slog.Info("HTTP服务开始关闭...")
 	shutdownCtx, cancelShutdown := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancelShutdown()
 
@@ -87,7 +87,7 @@ func main() {
 			slog.Error("强制关闭HTTP服务失败: %v", closeErr)
 		}
 	} else {
-		slog.Info("HTTP服务已关闭")
+		slog.Info("HTTP服务已关闭!")
 	}
 
 }
